@@ -35,4 +35,4 @@ title,alternative,creator,contributor,subject,abstract,description,publisher,dat
 DIÁRIO DE PILAR NA ÁFRICA,,FLÁVIA LINS E SILVA,JOANA PENNA,África,"Na luta pela liberdade e contra a injustiça, Pilar e seus amigos vão parar do outro lado do Atlântico. Nessa aventura eles aprendem muito sobre a cultura africana.",,Pequeno Zahar,2022,impresso,978-65-8889-919-9,,pt-BR,,infantojuvenil,200p,,"LINS E SILVA, Flávia. Diário de Pilar na África. Rio de Janeiro: Pequeno Zahar, 2022.",https://cdl-static.s3-sa-east-1.amazonaws.com/covers/gg/9786588899199/diario-de-pilar-na-africa-nova-edicao.jpg
 ```
 
-Acesse o exemplo de csv [aqui](/data/exemplo_dcmi/exemplo.csv).
+Acesse o exemplo de csv [aqui](exemplo.csv).
