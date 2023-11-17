@@ -19,4 +19,4 @@ O acesso ao servidor do Omeka S será feito por meio de uma parceria com o [Mest
 -  Cecília Costa Moreira - bolsista
 -  Thais Jardim Novaes Sacramento - bolsista
 - [Eric Brasil](ericbrasiln.github.io) - Colaborador
-- [Priscila Silveira Valverde](https://github.com/priscilavalverdes) - Colaboradora
+- [Priscila Valverde Silveira](https://github.com/priscilavalverdes) - Colaboradora
