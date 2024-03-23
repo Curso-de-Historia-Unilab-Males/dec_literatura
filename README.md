@@ -20,3 +20,7 @@ O acesso ao servidor do Omeka S será feito por meio de uma parceria com o [Mest
 -  Thais Jardim Novaes Sacramento - bolsista
 - [Eric Brasil](ericbrasiln.github.io) - Colaborador
 - [Priscila Valverde Silveira](https://github.com/priscilavalverdes) - Colaboradora
+
+## Licença
+
+© 2024. Repositório licenciado abertamente via [CC BY-NC-SA 4.0 Deed Atribuição-NãoComercial-CompartilhaIgual 4.0 Internacional](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt-br). [![Licença: CC BY-NC-SA 4.0](https://licensebuttons.net/l/by-nc-sa/4.0/80x15.png)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
