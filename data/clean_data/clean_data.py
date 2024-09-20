@@ -37,7 +37,7 @@ def add_collection(data, collection):
 
 # function to save the data in a csv file
 def save_data(data, file):
-    data.to_csv(file, sep=';', index=False)
+    data.to_csv(file, sep='\t', index=False)
 
 
 # call the functions using input and output files

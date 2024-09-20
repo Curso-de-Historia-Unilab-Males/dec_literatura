@@ -7,12 +7,17 @@ import os
 import bs4
 import wget
 
+
+data = '/home/ebn/Documentos/Github/dec_literatura/Curso-de-Historia-Unilab-Males/dec_literatura/data/clean_data/full_data.csv'
+
 # Carregar a base de dados
-df = pd.read_csv('cult-mit-africa.csv')
+df = pd.read_csv(data)
+
+print(df.head())
 
 # Criar diretório para armazenar as imagens
-if not os.path.exists('capas'):
-    os.makedirs('capas')
+if not os.path.exists('covers'):
+    os.makedirs('covers')
 
 # renomear colunas: remover espaços antes do nome e colocar em minúsculo
 df.columns = [col.lower().strip() for col in df.columns]
@@ -39,7 +44,7 @@ for url, identificador in urls:
         response = requests.get(url)
         response.raise_for_status()
         try:
-            with open(f'capas/{identificador}.jpg', 'wb') as f:
+            with open(f'covers/{identificador}.jpg', 'wb') as f:
                 f.write(response.content)
         except requests.exceptions.RequestException as e:
             print(f'Erro ao baixar a imagem {url}: {e}')
@@ -53,7 +58,7 @@ for url, identificador in urls:
             img = soup.find('img')
             img_url = img['src']
             # use wget para baixar a imagem
-            wget.download(img_url, f'capas/{identificador}.jpg')
+            wget.download(img_url, f'covers/{identificador}.jpg')
         except requests.exceptions.RequestException as e:
             print(f'Erro ao baixar a imagem {url}: {e}')
         except (KeyError, TypeError) as e:
