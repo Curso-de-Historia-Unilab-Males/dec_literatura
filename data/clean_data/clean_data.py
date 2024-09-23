@@ -6,38 +6,54 @@
 import pandas as pd
 
 
-# function to read the xlsx
 def read_xlsx(file):
-    data = pd.read_excel(file)
-    return data
+    """Read the xlsx file and return a pandas dataframe
+    """
+    df = pd.read_excel(file)
+    return df
 
 
-# function to clean the data
-def clean_data(data):
+def clean_df(df):
+    """Clean the dataframe removing unnamed columns, changing column names
+       to lower case and replacing spaces by underscores.
+       Change all ';' to ',' in the df to avoid problems with csv files.
+    """
     # strip and lower the column names
-    data.columns = data.columns.str.strip().str.lower()
+    df.columns = df.columns.str.strip().str.lower()
     # replace spaces by underscores
-    data.columns = data.columns.str.replace(' ', '_')
+    df.columns = df.columns.str.replace(' ', '_')
     # if column has 'unnamed:' in the name, drop it
-    data = data.loc[:, ~data.columns.str.contains('^unnamed:', case=False)]
-    return data
+    df = df.loc[:, ~df.columns.str.contains('^unnamed:', case=False)]
+    # change all ';' to ',' in the df
+    df = df.replace(';', ',', regex=True)
+    df.loc[df['tipo'].notnull(), 'tipo'] = 'Físico'
+    df['identificador'] = df['identificador'].str.replace('-','').str.strip()
+    df['idioma'] = df['idioma'].str.replace('pt-br', 'pt-BR')
+    df['idioma'] = df['idioma'].str.replace('Pt-BR', 'pt-BR')
+    df['extensão'] = df['extensão'].str.lower().str.replace('p','').str.strip()
+    df['extensão'] = df['extensão'].fillna('não consta')
+    return df
 
 
-# function to concatenate the dataframes
-def concat_data(*dfs):
-    data = pd.concat(dfs)
-    return data
+def concat_df(*dfs):
+    """Concatenate the dataframes in the list
+       Return a single dataframe
+    """
+    df = pd.concat(dfs)
+    return df
 
 
-# function to ad a column with the collection name to the data
-def add_collection(data, collection):
-    data['collection'] = collection
-    return data
+def add_collection(df, collection):
+    """Add a column with the collection name to the dataframe
+    """
+    df['collection'] = collection
+    return df
 
 
-# function to save the data in a csv file
-def save_data(data, file):
-    data.to_csv(file, sep='\t', index=False)
+def save_df(df, file):
+    """Save the dataframe in a csv file. Use ';' as separater.
+    """
+    df.to_csv(file, sep=';', index=False)
 
 
 # call the functions using input and output files
@@ -49,13 +65,13 @@ def main():
     afro_br = read_xlsx('../raw_data/afrbr.xlsx')
 
     # clean the data
-    africa1 = clean_data(africa1)
-    africa2 = clean_data(africa2)
-    indigena = clean_data(indigena)
-    afro_br = clean_data(afro_br)
+    africa1 = clean_df(africa1)
+    africa2 = clean_df(africa2)
+    indigena = clean_df(indigena)
+    afro_br = clean_df(afro_br)
 
     # concatenate the data
-    africa = concat_data(africa1, africa2)
+    africa = concat_df(africa1, africa2)
 
     # add the collection name to the data
     africa = add_collection(africa, 'africana')
@@ -63,13 +79,13 @@ def main():
     afro_br = add_collection(afro_br, 'afro-brasileira')
 
     # concatenate the data from the 3 collections
-    full_data = concat_data(africa, indigena, afro_br)
+    full_data = concat_df(africa, indigena, afro_br)
 
     # save the data in a csv file
-    save_data(africa, 'africa.csv')
-    save_data(indigena, 'indigena.csv')
-    save_data(afro_br, 'afro-br.csv')
-    save_data(full_data, 'full_data.csv')
+    save_df(africa, 'africa.csv')
+    save_df(indigena, 'indigena.csv')
+    save_df(afro_br, 'afro-br.csv')
+    save_df(full_data, 'full_data.csv')
 
 
 if __name__ == '__main__':
