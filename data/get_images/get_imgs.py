@@ -7,12 +7,22 @@ import os
 import bs4
 import wget
 
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Referer": "https://acervo.bn.gov.br",
+    "Connection": "keep-alive",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+}
+
+data = input('Digite o caminho do arquivo csv: ')
+
 # Carregar a base de dados
-df = pd.read_csv('cult-mit-africa.csv')
+df = pd.read_csv(data, sep=';')
 
 # Criar diretório para armazenar as imagens
-if not os.path.exists('capas'):
-    os.makedirs('capas')
+if not os.path.exists('covers'):
+    os.makedirs('covers')
 
 # renomear colunas: remover espaços antes do nome e colocar em minúsculo
 df.columns = [col.lower().strip() for col in df.columns]
@@ -28,35 +38,46 @@ for i, row in df.iterrows():
         if item in row['arquivo']:
             df.drop(i, inplace=True)
 
-# criar tupla de urls e identificadores únicos
-urls = [(row['arquivo'], row['identificador']) for i, row in df.iterrows()]
+# criar tupla de urls e titulo únicos
+urls = [(row['arquivo'], row['título']) for i, row in df.iterrows()]
 
+# function to clean titulo
+def title_clean(title):
+    title = title.lower()
+    title = title.strip()
+    title = title.replace(' ', '_')
+    title = title.replace('/', '_')
+    title = title.replace(':', '_')
+    title = title.replace('?', '_')
+    title = title.replace('!', '_')
+    title = title.replace(';', '_')
+    title = title.replace(',', '_')
+    title = title.replace('(', '_')
+    title = title.replace(')', '_')
+    title = title.replace('[', '_')
+    title = title.replace(']', '_')
+    title = title.replace('{', '_')
+    title = title.replace('}', '_')
+    title = title.replace('"', '_')
+    title = title.replace("'", '_')
+    # truncate title
+    if len(title) > 30:
+        title = title[:30]
+    return title
 # Iterar sobre as tuplas urls
-# baixar as imagens e salvar no diretório 'capas' com o nome do identificador
-for url, identificador in urls:
-    if url.endswith('.jpg'):
-        print(f'Baixando a imagem {url} com método requests')
-        response = requests.get(url)
-        response.raise_for_status()
-        try:
-            with open(f'capas/{identificador}.jpg', 'wb') as f:
-                f.write(response.content)
-        except requests.exceptions.RequestException as e:
-            print(f'Erro ao baixar a imagem {url}: {e}')
-    else:
-        print(f'Baixando a imagem {url} com método bs4')
-        # use bs4 para extrair a url da imagem
-        try:
-            response = requests.get(url)
-            # response.raise_for_status()
-            soup = bs4.BeautifulSoup(response.text, 'html.parser')
-            img = soup.find('img')
-            img_url = img['src']
-            # use wget para baixar a imagem
-            wget.download(img_url, f'capas/{identificador}.jpg')
-        except requests.exceptions.RequestException as e:
-            print(f'Erro ao baixar a imagem {url}: {e}')
-        except (KeyError, TypeError) as e:
-            print(f'Erro ao extrair a url da imagem {url}: {e}')
-        except Exception as e:
-            print(f'Erro desconhecido: {e}')
+# baixar as imagens e salvar no diretório 'capas' com o nome do titulo
+for url, titulo in urls:
+    titulo = title_clean(titulo)
+    print(titulo)
+    # check if image is already downloaded
+    if os.path.exists(f'covers/{titulo}.jpg'):
+        print(f'A imagem {titulo}.jpg já foi baixada')
+        continue
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raises an error for bad responses (4xx or 5xx)
+        with open(f'covers/{titulo}.jpg', 'wb') as f:
+            f.write(response.content)
+        print(f'Imagem {titulo}.jpg baixada com sucesso.')
+    except Exception as e:
+        print(f'Erro {url}: {e}\n')
