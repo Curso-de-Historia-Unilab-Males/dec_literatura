@@ -32,6 +32,10 @@ def clean_df(df):
     df['idioma'] = df['idioma'].str.replace('Pt-BR', 'pt-BR')
     df['extensão'] = df['extensão'].str.lower().str.replace('p','').str.strip()
     df['extensão'] = df['extensão'].fillna('não consta')
+    # delete "" from the column 'título'
+    df['título'] = df['título'].str.replace('"', '')
+    df['título'] = df['título'].str.replace(';', ',')
+    
     return df
 
 
@@ -46,7 +50,7 @@ def concat_df(*dfs):
 def add_collection(df, collection):
     """Add a column with the collection name to the dataframe
     """
-    df['collection'] = collection
+    df['coleção'] = collection
     return df
 
 
@@ -74,9 +78,9 @@ def main():
     africa = concat_df(africa1, africa2)
 
     # add the collection name to the data
-    africa = add_collection(africa, 'africana')
-    indigena = add_collection(indigena, 'indigena')
-    afro_br = add_collection(afro_br, 'afro-brasileira')
+    africa = add_collection(africa, 'Africana')
+    indigena = add_collection(indigena, 'Indígena')
+    afro_br = add_collection(afro_br, 'Afro-brasileira')
 
     # concatenate the data from the 3 collections
     full_data = concat_df(africa, indigena, afro_br)
