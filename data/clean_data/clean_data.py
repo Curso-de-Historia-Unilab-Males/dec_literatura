@@ -32,9 +32,6 @@ def clean_df(df):
     df['idioma'] = df['idioma'].str.replace('Pt-BR', 'pt-BR')
     df['extensão'] = df['extensão'].str.lower().str.replace('p','').str.strip()
     df['extensão'] = df['extensão'].fillna('não consta')
-    # delete "" from the column 'título'
-    df['título'] = df['título'].str.replace('"', '')
-    df['título'] = df['título'].str.replace(';', ',')
     
     return df
 

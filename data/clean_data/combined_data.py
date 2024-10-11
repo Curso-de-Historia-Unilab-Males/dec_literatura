@@ -23,8 +23,7 @@ df['cleaned_titulo'] = df['título'].apply(title_clean)
 downloaded_files = set(os.listdir('../get_images/covers'))  # Lista de arquivos já baixados
 
 # Criar uma nova coluna com os links permanentes baseados nos arquivos existentes
-commit_hash = '52acba28340209c29313f5bd488442bc49692b81'  # O hash do commit específico
-base_url = f'https://raw.githubusercontent.com/Curso-de-Historia-Unilab-Males/dec_literatura/{commit_hash}/data/get_images/covers/'
+base_url = f'https://raw.githubusercontent.com/Curso-de-Historia-Unilab-Males/dec_literatura/refs/heads/main/data/get_images/covers/'
 
 # Mapear os arquivos existentes para as URLs
 def get_cover_url(cleaned_title):
@@ -35,6 +34,10 @@ def get_cover_url(cleaned_title):
         return 'Imagem não disponível'
 
 df['cover_url'] = df['cleaned_titulo'].apply(get_cover_url)
+
+# delete "" from the column 'título'
+df['título'] = df['título'].str.replace('"', '')
+df['título'] = df['título'].str.replace(';', ',')
 
 # Salvar a base de dados atualizada com as URLs das capas
 df.to_csv('base_atualizada_com_capas.csv', sep=';', index=False)
